@@ -5,6 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.time.LocalDate;
+import java.util.Set;
 import java.util.stream.Stream;
 
 @SpringBootApplication
@@ -15,13 +17,26 @@ public class Application {
     }
 
     @Bean
-    CommandLineRunner init(UserRepository userRepository) {
+    CommandLineRunner init(MovieRepository movieRepository) {
         return args -> {
-            Stream.of("John", "Julie", "Jennifer", "Helen", "Rachel").forEach(name -> {
-                User user = new User(name, name.toLowerCase() + "@domain.com");
-                userRepository.save(user);
+            Stream.of(
+                    "The Shawshank Redemption",
+                    "The Godfather",
+                    "The Dark Knight",
+                    "The Godfather Part II",
+                    "12 Angry Men"
+            ).forEach(title -> {
+                String description = "";
+                LocalDate releaseDate = LocalDate.parse("2022-10-10");
+                Set<String> directors = Set.of("");
+                Set<String> starCast = Set.of("");
+                Set<String> genres = Set.of("");
+
+                Movie movie = new Movie(title, description, releaseDate, directors, starCast, genres);
+                movieRepository.save(movie);
             });
-            userRepository.findAll().forEach(System.out::println);
+            movieRepository.findAll().forEach(System.out::println);
         };
     }
+
 }
